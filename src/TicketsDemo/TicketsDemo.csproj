@@ -21,5 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\TicketsDemo.Models\TicketsDemo.Models.csproj" />
     <ProjectReference Include="..\TicketsDemo.Services\TicketsDemo.Services.csproj" />
+    <ProjectReference Include="..\TicketsDemo.Common\TicketsDemo.Common.csproj" />
   </ItemGroup>
 </Project>

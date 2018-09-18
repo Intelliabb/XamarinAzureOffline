@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketsDemo.Services", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketsDemo.Models", "src\TicketsDemo.Models\TicketsDemo.Models.csproj", "{73A254AA-6308-4847-A9AE-B0DD7C14651E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketsDemo.Common", "src\TicketsDemo.Common\TicketsDemo.Common.csproj", "{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -136,5 +138,27 @@ Global
 		{73A254AA-6308-4847-A9AE-B0DD7C14651E}.Mock|iPhoneSimulator.Build.0 = Debug|Any CPU
 		{73A254AA-6308-4847-A9AE-B0DD7C14651E}.Mock|iPhone.ActiveCfg = Debug|Any CPU
 		{73A254AA-6308-4847-A9AE-B0DD7C14651E}.Mock|iPhone.Build.0 = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Mock|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Mock|Any CPU.Build.0 = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Release|iPhone.Build.0 = Release|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Mock|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Mock|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Mock|iPhone.ActiveCfg = Debug|Any CPU
+		{4B9885AE-4D3D-4353-B5BE-1D669DB6033D}.Mock|iPhone.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

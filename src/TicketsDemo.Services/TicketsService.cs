@@ -1,40 +1,46 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TicketsDemo.Models;
 using TicketsDemo.Services.Abstractions;
+using Microsoft.WindowsAzure.MobileServices;
+using TicketsDemo.Common;
+using System.Collections.Generic;
 
 namespace TicketsDemo.Services
 {
     public class TicketsService : ITicketsService
     {
+        readonly IMobileServiceClient _client;
+        readonly IMobileServiceTable<Ticket> _ticketsTable;
+
         public TicketsService()
         {
+            _client = new MobileServiceClient(AppConstants.AppServiceUrl);
+            _ticketsTable = _client.GetTable<Ticket>();
         }
 
-        public Task<Ticket> AddTicket(Ticket ticket)
+        public Task AddTicket(Ticket ticket)
         {
-            throw new NotImplementedException();
+            return _ticketsTable.InsertAsync(ticket);
         }
 
-        public void DeleteTicket(Ticket ticket)
+        public Task DeleteTicket(Ticket ticket)
         {
-            throw new NotImplementedException();
+            return _ticketsTable.DeleteAsync(ticket);
         }
 
         public Task<Ticket> GetTicket(string id)
         {
-            throw new NotImplementedException();
+            return _ticketsTable.LookupAsync(id);
         }
 
-        public Task<ObservableCollection<Ticket>> GetTickets()
+        public Task<List<Ticket>> GetTickets()
         {
-            throw new NotImplementedException();
+            return _ticketsTable.ToListAsync();
         }
 
-        public void UpdateTicket(Ticket ticket)
+        public Task UpdateTicket(Ticket ticket)
         {
-            throw new NotImplementedException();
+            return _ticketsTable.UpdateAsync(ticket);
         }
     }
 }

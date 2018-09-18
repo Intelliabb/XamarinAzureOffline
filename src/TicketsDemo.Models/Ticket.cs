@@ -22,7 +22,6 @@ namespace TicketsDemo.Models
             set;
         }
 
-        [JsonProperty("Desc")]
         public string Description
         {
             get;

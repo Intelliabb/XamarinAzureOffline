@@ -29,6 +29,10 @@
                                 </StackLayout>
                             </StackLayout>
                             <ia:Checkbox Grid.Column="1" IsChecked="{Binding IsCompleted, Mode=TwoWay}" FillColor="{StaticResource Accent}" OutlineColor="{StaticResource Accent}"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Handle_Tapped" Command="{Binding TicketTappedCommand}" CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

@@ -11,11 +11,5 @@ namespace TicketsDemo.Views
         {
             InitializeComponent();
         }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            PriorityPicker.ItemsSource = new int[] { 1, 2, 3, 4 };
-        }
     }
 }
