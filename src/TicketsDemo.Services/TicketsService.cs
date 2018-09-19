@@ -85,10 +85,12 @@ namespace TicketsDemo.Services
             return _ticketsTable.LookupAsync(id);
         }
 
-        public async Task<ObservableCollection<Ticket>> GetTickets()
+        public async Task<ObservableCollection<Ticket>> GetTickets(bool sync = true)
         {
-            await SyncAsync();
-            var results = await _ticketsTable.ToEnumerableAsync();
+            if(sync)
+                await SyncAsync();
+            
+            var results = await _ticketsTable.OrderBy(_=>_.Priority).ThenBy(_=>_.CreatedAt).ToEnumerableAsync();
             return new ObservableCollection<Ticket>(results);
         }
 

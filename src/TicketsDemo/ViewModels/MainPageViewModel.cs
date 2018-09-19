@@ -23,6 +23,7 @@ namespace TicketsDemo.ViewModels
         {
             Title = "Open Tickets";
             _ticketsService = ticketsService;
+
             AddCommand = new DelegateCommand(OnAddTapped);
             TicketTappedCommand = new DelegateCommand<Ticket>(OnTicketTapped);
             EditCommand = new DelegateCommand<Ticket>(OnEditTapped);
@@ -36,6 +37,13 @@ namespace TicketsDemo.ViewModels
         {
             get { return _tickets; }
             set { SetProperty(ref _tickets, value); }
+        }
+
+        private bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get { return _isRefreshing; }
+            set { SetProperty(ref _isRefreshing, value); }
         }
 
         public DelegateCommand AddCommand { get; private set; }
@@ -54,11 +62,12 @@ namespace TicketsDemo.ViewModels
 
         async void OnTicketTapped(Ticket obj)
         {
+            if (obj == null) return;
             IsBusy = true;
             obj.IsCompleted = !obj.IsCompleted;
             await _ticketsService.UpdateTicket(obj);
+            await Refresh(false);
             IsBusy = false;
-            await Refresh();
         }
 
         async void OnEditTapped(Ticket obj)
@@ -72,11 +81,16 @@ namespace TicketsDemo.ViewModels
             await _navigationService.NavigateAsync(nameof(AddPage));
         }
 
-        async Task Refresh()
+        async Task Refresh(bool sync = true)
         {
-            IsBusy = true;
-            Tickets = await _ticketsService.GetTickets();
-            IsBusy = false;
+            if (!sync)
+                Tickets = await _ticketsService.GetTickets(sync);
+            else
+            {
+                IsRefreshing = true;
+                Tickets = await _ticketsService.GetTickets(sync);
+                IsRefreshing = false;
+            }
         }
 
         #endregion
@@ -87,7 +101,14 @@ namespace TicketsDemo.ViewModels
             await Refresh();
         }
 
+        public async override void OnNavigatedTo(NavigationParameters parameters)
+        {
+            if(parameters.GetNavigationMode() == NavigationMode.Back) {
+                await Refresh();
+            }
+        }
+
         #endregion
-        
+
     }
 }

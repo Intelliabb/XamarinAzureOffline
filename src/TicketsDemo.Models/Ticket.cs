@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace TicketsDemo.Models
 {
@@ -37,6 +38,13 @@ namespace TicketsDemo.Models
 
         [JsonProperty("Completed")]
         public bool IsCompleted
+        {
+            get;
+            set;
+        }
+
+        [JsonProperty("createdAt")]
+        public DateTime CreatedAt
         {
             get;
             set;

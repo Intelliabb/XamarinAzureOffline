@@ -7,7 +7,7 @@ namespace TicketsDemo.Services.Abstractions
 {
     public interface ITicketsService
     {
-        Task<ObservableCollection<Ticket>> GetTickets();
+        Task<ObservableCollection<Ticket>> GetTickets(bool sync = true);
         Task<Ticket> GetTicket(string id);
         Task AddTicket(Ticket ticket);
         Task DeleteTicket(Ticket ticket);
