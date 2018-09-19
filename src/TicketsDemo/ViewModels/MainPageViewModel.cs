@@ -25,13 +25,14 @@ namespace TicketsDemo.ViewModels
             _ticketsService = ticketsService;
             AddCommand = new DelegateCommand(OnAddTapped);
             TicketTappedCommand = new DelegateCommand<Ticket>(OnTicketTapped);
+            EditCommand = new DelegateCommand<Ticket>(OnEditTapped);
             RefreshCommand = new DelegateCommand(OnRefreshTapped);
         }
 
         #region Properties
 
-        List<Ticket> _tickets;
-        public List<Ticket> Tickets
+        ObservableCollection<Ticket> _tickets;
+        public ObservableCollection<Ticket> Tickets
         {
             get { return _tickets; }
             set { SetProperty(ref _tickets, value); }
@@ -39,6 +40,7 @@ namespace TicketsDemo.ViewModels
 
         public DelegateCommand AddCommand { get; private set; }
         public DelegateCommand<Ticket> TicketTappedCommand { get; private set; }
+        public DelegateCommand<Ticket> EditCommand { get; private set; }
         public DelegateCommand RefreshCommand { get; private set; }
 
         #endregion
@@ -52,8 +54,17 @@ namespace TicketsDemo.ViewModels
 
         async void OnTicketTapped(Ticket obj)
         {
+            IsBusy = true;
+            obj.IsCompleted = !obj.IsCompleted;
+            await _ticketsService.UpdateTicket(obj);
+            IsBusy = false;
+            await Refresh();
+        }
+
+        async void OnEditTapped(Ticket obj)
+        {
             await _navigationService.NavigateAsync(nameof(AddPage), new NavigationParameters {
-                {AppConstants.TICKET_KEY, obj}});
+            {AppConstants.TICKET_KEY, obj}});
         }
 
         async void OnAddTapped()

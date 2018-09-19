@@ -1,6 +1,4 @@
-﻿using TicketsDemo.Models;
-using TicketsDemo.ViewModels;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace TicketsDemo.Views
 {
@@ -15,14 +13,6 @@ namespace TicketsDemo.Views
         {
             if (!(sender is ListView lv)) return;
             lv.SelectedItem = null;
-        }
-
-        void Handle_Tapped(object sender, System.EventArgs e)
-        {
-            // HACK: Command not working right.
-            var x = e as TappedEventArgs;
-            if (!(BindingContext is MainPageViewModel vm)) return;
-            vm.TicketTappedCommand?.Execute((Ticket)x?.Parameter);
         }
     }
 }

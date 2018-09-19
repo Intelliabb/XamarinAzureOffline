@@ -6,20 +6,24 @@
              xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
              xmlns:ia="clr-namespace:IntelliAbb.Xamarin.Controls;assembly=IntelliAbb.Xamarin.Controls"
              Title="{Binding Title}" 
-             x:Class="TicketsDemo.Views.MainPage">
+             x:Class="TicketsDemo.Views.MainPage"
+             x:Name="this">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="ADD" Command="{Binding AddCommand}"/>
     </ContentPage.ToolbarItems>
-        <ListView ItemsSource="{Binding Tickets}" HasUnevenRows="true" ItemSelected="Handle_ItemSelected" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsBusy}">
+        <ListView ItemsSource="{Binding Tickets}" HasUnevenRows="true" ItemSelected="Handle_ItemSelected" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsBusy}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Edit" Command="{Binding BindingContext.EditCommand, Source={x:Reference this}}" CommandParameter="{Binding .}"/>
+                        </ViewCell.ContextActions>
+                    
                         <Grid Padding="8">
                             <Grid.ColumnDefinitions>
                               <ColumnDefinition Width="*"/>
                               <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-
                             
                             <StackLayout Spacing="0">
                                 <Label Text="{Binding Title}" FontSize="Large"/>
@@ -28,10 +32,10 @@
                                 <Label Text="{Binding AssignedTo, StringFormat='Assigned To: {0}'}" FontSize="Micro" TextColor="Gray" HorizontalOptions="FillAndExpand"/>
                                 </StackLayout>
                             </StackLayout>
-                            <ia:Checkbox Grid.Column="1" IsChecked="{Binding IsCompleted, Mode=TwoWay}" FillColor="{StaticResource Accent}" OutlineColor="{StaticResource Accent}"/>
+                            <ia:Checkbox InputTransparent="true" Grid.Column="1" IsChecked="{Binding IsCompleted, Mode=TwoWay}" FillColor="{StaticResource Accent}" OutlineColor="{StaticResource Accent}" />
 
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="Handle_Tapped" Command="{Binding TicketTappedCommand}" CommandParameter="{Binding .}"/>
+                            <TapGestureRecognizer Command="{Binding BindingContext.TicketTappedCommand, Source={x:Reference this}}" CommandParameter="{Binding .}"/>
                         </Grid.GestureRecognizers>
                         </Grid>
                     </ViewCell>

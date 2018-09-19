@@ -85,10 +85,11 @@ namespace TicketsDemo.Services
             return _ticketsTable.LookupAsync(id);
         }
 
-        public async Task<List<Ticket>> GetTickets()
+        public async Task<ObservableCollection<Ticket>> GetTickets()
         {
             await SyncAsync();
-            return await _ticketsTable.ToListAsync();
+            var results = await _ticketsTable.ToEnumerableAsync();
+            return new ObservableCollection<Ticket>(results);
         }
 
         public Task UpdateTicket(Ticket ticket)
