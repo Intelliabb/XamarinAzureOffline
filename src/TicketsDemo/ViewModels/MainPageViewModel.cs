@@ -9,6 +9,7 @@ using TicketsDemo.Models;
 using TicketsDemo.Views;
 using System.Collections.Generic;
 using TicketsDemo.Common;
+using System.Threading.Tasks;
 
 namespace TicketsDemo.ViewModels
 {
@@ -24,6 +25,29 @@ namespace TicketsDemo.ViewModels
             _ticketsService = ticketsService;
             AddCommand = new DelegateCommand(OnAddTapped);
             TicketTappedCommand = new DelegateCommand<Ticket>(OnTicketTapped);
+            RefreshCommand = new DelegateCommand(OnRefreshTapped);
+        }
+
+        #region Properties
+
+        List<Ticket> _tickets;
+        public List<Ticket> Tickets
+        {
+            get { return _tickets; }
+            set { SetProperty(ref _tickets, value); }
+        }
+
+        public DelegateCommand AddCommand { get; private set; }
+        public DelegateCommand<Ticket> TicketTappedCommand { get; private set; }
+        public DelegateCommand RefreshCommand { get; private set; }
+
+        #endregion
+
+        #region Methods
+
+        async void OnRefreshTapped()
+        {
+            await Refresh();
         }
 
         async void OnTicketTapped(Ticket obj)
@@ -37,19 +61,22 @@ namespace TicketsDemo.ViewModels
             await _navigationService.NavigateAsync(nameof(AddPage));
         }
 
-        List<Ticket> _tickets;
-        public List<Ticket> Tickets
+        async Task Refresh()
         {
-            get { return _tickets; }
-            set { SetProperty(ref _tickets, value); }
+            IsBusy = true;
+            Tickets = await _ticketsService.GetTickets();
+            IsBusy = false;
         }
 
-        public DelegateCommand AddCommand { get; private set; }
-        public DelegateCommand<Ticket> TicketTappedCommand { get; private set; }
+        #endregion
 
+        #region Overrides
         public async override void OnNavigatingTo(NavigationParameters parameters)
         {
-            Tickets = await _ticketsService.GetTickets();
+            await Refresh();
         }
+
+        #endregion
+        
     }
 }

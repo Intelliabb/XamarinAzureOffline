@@ -8,6 +8,8 @@ using Xamarin.Forms;
 using Prism;
 using TicketsDemo.Services.Abstractions;
 using TicketsDemo.Services;
+using Plugin.FileSystem;
+using Plugin.FileSystem.Abstractions;
 
 namespace TicketsDemo
 {
@@ -37,10 +39,12 @@ namespace TicketsDemo
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            // Pages
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
             containerRegistry.RegisterForNavigation<AddPage>();
 
+            // Services
             containerRegistry.Register<ITicketsService, TicketsService>();
         }
     }

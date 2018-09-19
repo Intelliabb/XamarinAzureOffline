@@ -4,18 +4,70 @@ using TicketsDemo.Services.Abstractions;
 using Microsoft.WindowsAzure.MobileServices;
 using TicketsDemo.Common;
 using System.Collections.Generic;
+using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
+using Microsoft.WindowsAzure.MobileServices.Sync;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace TicketsDemo.Services
 {
     public class TicketsService : ITicketsService
     {
         readonly IMobileServiceClient _client;
-        readonly IMobileServiceTable<Ticket> _ticketsTable;
+        IMobileServiceSyncTable<Ticket> _ticketsTable;
 
         public TicketsService()
         {
             _client = new MobileServiceClient(AppConstants.AppServiceUrl);
-            _ticketsTable = _client.GetTable<Ticket>();
+            InitializeOfflineStore();
+        }
+
+        void InitializeOfflineStore()
+        {
+            var store = new MobileServiceSQLiteStore(AppConstants.DB_FILENAME);
+            store.DefineTable<Ticket>();
+            _client.SyncContext.InitializeAsync(store);
+
+            _ticketsTable = _client.GetSyncTable<Ticket>();
+        }
+
+        async Task SyncAsync()
+        {
+            ReadOnlyCollection<MobileServiceTableOperationError> syncErrors = null;
+            try
+            {
+                await _client.SyncContext.PushAsync();
+                await _ticketsTable.PullAsync("all", _ticketsTable.CreateQuery());
+
+            }
+            catch (MobileServicePushFailedException ex)
+            {
+                if(ex.PushResult != null)
+                {
+                    syncErrors = ex.PushResult.Errors;
+                }
+            }
+
+            if (syncErrors != null)
+            {
+                foreach (var error in syncErrors)
+                {
+                    if (error.OperationKind == MobileServiceTableOperationKind.Update && error.Result != null)
+                    {
+                        // Update failed, revert to server's copy
+                        await error.CancelAndUpdateItemAsync(error.Result);
+                    }
+                    else
+                    {
+                        // Discard local change
+                        await error.CancelAndDiscardItemAsync();
+                    }
+
+                    Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
+                }
+            }
+            else
+                Debug.WriteLine("Synced successfully.");
         }
 
         public Task AddTicket(Ticket ticket)
@@ -33,9 +85,10 @@ namespace TicketsDemo.Services
             return _ticketsTable.LookupAsync(id);
         }
 
-        public Task<List<Ticket>> GetTickets()
+        public async Task<List<Ticket>> GetTickets()
         {
-            return _ticketsTable.ToListAsync();
+            await SyncAsync();
+            return await _ticketsTable.ToListAsync();
         }
 
         public Task UpdateTicket(Ticket ticket)

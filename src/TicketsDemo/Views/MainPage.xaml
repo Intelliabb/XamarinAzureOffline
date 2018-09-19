@@ -10,7 +10,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="ADD" Command="{Binding AddCommand}"/>
     </ContentPage.ToolbarItems>
-        <ListView ItemsSource="{Binding Tickets}" HasUnevenRows="true" ItemSelected="Handle_ItemSelected">
+        <ListView ItemsSource="{Binding Tickets}" HasUnevenRows="true" ItemSelected="Handle_ItemSelected" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" IsRefreshing="{Binding IsBusy}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

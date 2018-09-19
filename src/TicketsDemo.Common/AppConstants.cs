@@ -6,5 +6,6 @@
         public const string TICKET_KEY = "ticket_key";
         public const string UPDATE = "Update";
         public const string ADD = "Add";
+        public const string DB_FILENAME = "TicketsDemoOfflineStore.db3";
     }
 }
