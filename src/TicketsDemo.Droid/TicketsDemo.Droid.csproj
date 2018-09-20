@@ -25,7 +25,8 @@
     <MandroidI18n />
     <JavaMaximumHeapSize />
     <JavaOptions />
-    <NuGetPackageImportStamp></NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mock|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +70,9 @@
     <PackageReference Include="Prism.Unity.Forms" Version="7.0.0.396" />
     <PackageReference Include="Mobile.BuildTools" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="Prism.QuickStart.MFractor.Config" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Xam.Plugin.FileSystem">
+      <Version>1.0.10</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="26.1.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="26.1.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v4" Version="26.1.0.1" />
@@ -122,11 +127,11 @@
       <Project>{28A1D9CA-79D9-489C-A488-15E3315DA8D6}</Project>
       <Name>TicketsDemo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TicketsDemo.Services\TicketsDemo.Services.csproj">
+    <ProjectReference Include="..\TicketsDemo.Services\TicketsDemo.Services.csproj">
       <Project>{39D519AF-B4F0-486C-8320-CED324765D79}</Project>
       <Name>TicketsDemo.Services</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TicketsDemo.Models\TicketsDemo.Models.csproj">
+    <ProjectReference Include="..\TicketsDemo.Models\TicketsDemo.Models.csproj">
       <Project>{73A254AA-6308-4847-A9AE-B0DD7C14651E}</Project>
       <Name>TicketsDemo.Models</Name>
     </ProjectReference>

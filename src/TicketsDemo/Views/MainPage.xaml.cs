@@ -1,4 +1,5 @@
 ﻿using TicketsDemo.Models;
+using TicketsDemo.ViewModels;
 using Xamarin.Forms;
 
 namespace TicketsDemo.Views
@@ -12,8 +13,8 @@ namespace TicketsDemo.Views
 
         void Handle_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if (!(sender is ListView lv)) return;
-            lv.SelectedItem = null;
+            //if (!(sender is ListView lv)) return;
+            //lv.SelectedItem = null;
         }
     }
 }

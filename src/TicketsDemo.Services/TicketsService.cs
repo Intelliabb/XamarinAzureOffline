@@ -1,40 +1,102 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TicketsDemo.Models;
 using TicketsDemo.Services.Abstractions;
+using Microsoft.WindowsAzure.MobileServices;
+using TicketsDemo.Common;
+using System.Collections.Generic;
+using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
+using Microsoft.WindowsAzure.MobileServices.Sync;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace TicketsDemo.Services
 {
     public class TicketsService : ITicketsService
     {
+        readonly IMobileServiceClient _client;
+        IMobileServiceSyncTable<Ticket> _ticketsTable;
+
         public TicketsService()
         {
+            _client = new MobileServiceClient(AppConstants.AppServiceUrl);
+            InitializeOfflineStore();
         }
 
-        public Task<Ticket> AddTicket(Ticket ticket)
+        void InitializeOfflineStore()
         {
-            throw new NotImplementedException();
+            var store = new MobileServiceSQLiteStore(AppConstants.DB_FILENAME);
+            store.DefineTable<Ticket>();
+            _client.SyncContext.InitializeAsync(store);
+
+            _ticketsTable = _client.GetSyncTable<Ticket>();
         }
 
-        public void DeleteTicket(Ticket ticket)
+        async Task SyncAsync()
         {
-            throw new NotImplementedException();
+            ReadOnlyCollection<MobileServiceTableOperationError> syncErrors = null;
+            try
+            {
+                await _client.SyncContext.PushAsync();
+                await _ticketsTable.PullAsync("all", _ticketsTable.CreateQuery());
+
+            }
+            catch (MobileServicePushFailedException ex)
+            {
+                if(ex.PushResult != null)
+                {
+                    syncErrors = ex.PushResult.Errors;
+                }
+            }
+
+            if (syncErrors != null)
+            {
+                foreach (var error in syncErrors)
+                {
+                    if (error.OperationKind == MobileServiceTableOperationKind.Update && error.Result != null)
+                    {
+                        // Update failed, revert to server's copy
+                        await error.CancelAndUpdateItemAsync(error.Result);
+                    }
+                    else
+                    {
+                        // Discard local change
+                        await error.CancelAndDiscardItemAsync();
+                    }
+
+                    Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.", error.TableName, error.Item["id"]);
+                }
+            }
+            else
+                Debug.WriteLine("Synced successfully.");
+        }
+
+        public Task AddTicket(Ticket ticket)
+        {
+            return _ticketsTable.InsertAsync(ticket);
+        }
+
+        public Task DeleteTicket(Ticket ticket)
+        {
+            return _ticketsTable.DeleteAsync(ticket);
         }
 
         public Task<Ticket> GetTicket(string id)
         {
-            throw new NotImplementedException();
+            return _ticketsTable.LookupAsync(id);
         }
 
-        public Task<ObservableCollection<Ticket>> GetTickets()
+        public async Task<ObservableCollection<Ticket>> GetTickets(bool sync = true)
         {
-            throw new NotImplementedException();
+            if(sync)
+                await SyncAsync();
+            
+            var results = await _ticketsTable.OrderBy(_=>_.Priority).ThenBy(_=>_.CreatedAt).ToEnumerableAsync();
+            return new ObservableCollection<Ticket>(results);
         }
 
-        public void UpdateTicket(Ticket ticket)
+        public Task UpdateTicket(Ticket ticket)
         {
-            throw new NotImplementedException();
+            return _ticketsTable.UpdateAsync(ticket);
         }
     }
 }
